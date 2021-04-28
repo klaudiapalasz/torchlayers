@@ -18,12 +18,11 @@ class _Conv(module.InferDimension):
 
     See concrete classes (e.g. `Conv` or `DepthwiseConv`) for specific use cases.
 
-    Parameters
-    ----------
-    dispatcher: typing.Dict[int, typing.Any]
-        Dispatching dictionary for dimensionality reduction
-    **kwargs
-        Any arguments needed for class creation.
+    Arguments:
+        dispatcher:
+            Dispatching dictionary for dimensionality reduction
+        **kwargs
+            Any arguments needed for class creation.
 
     """
 
@@ -88,7 +87,7 @@ class Conv(_Conv):
     `kernel_size` got a default value of `3`.
 
     Otherwise acts exactly like PyTorch's Convolution, see
-    `documentation <https://pytorch.org/docs/stable/nn.html#convolution-layers>`__.
+    `documentation [here](https://pytorch.org/docs/stable/nn.html#convolution-layers)
 
     Example::
 
@@ -111,39 +110,38 @@ class Conv(_Conv):
                 return self.dense(self.pooling(x))
 
 
-    .. note::
-                **IMPORTANT**: `same` currently works only for odd values of `kernel_size`,
+    !!!note
+                __IMPORTANT__: `same` currently works only for odd values of `kernel_size`,
                 `dilation` and `stride`. If any of those is even you should explicitly pad
                 your input asymmetrically with `torch.functional.pad` or a-like.
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced by the convolution
-    kernel_size : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    stride : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    padding : Union[str, int, Tuple[int, int], Tuple[int, int, int]], optional
-        Padding added to both sides of the input. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `same`
-    dilation : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Spacing between kernel elements. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `1`
-    groups : int, optional
-        Number of blocked connections from input channels to output channels. Default: 1
-    bias : bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    padding_mode : string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
+    Attributes:
+        in_channels :
+            Number of channels in the input image
+        out_channels : 
+            Number of channels produced by the convolution
+        kernel_size :
+            Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        stride :
+            Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        padding : 
+            Padding added to both sides of the input. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `same`
+        dilation : 
+            Spacing between kernel elements. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `1`
+        groups :
+            Number of blocked connections from input channels to output channels. Default: 1
+        bias :
+            If ``True``, adds a learnable bias to the output. Default: ``True``
+        padding_mode :
+            Accepted values `zeros` and `circular` Default: `zeros`
 
     """
 
@@ -159,6 +157,36 @@ class Conv(_Conv):
         bias: bool = True,
         padding_mode: str = "zeros",
     ):
+        """Initialize `Conv` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input image
+            out_channels : 
+                Number of channels produced by the convolution
+            kernel_size :
+                Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            stride :
+                Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            padding : 
+                Padding added to both sides of the input. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `same`
+            dilation : 
+                Spacing between kernel elements. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `1`
+            groups :
+                Number of blocked connections from input channels to output channels. Default: 1
+            bias :
+                If ``True``, adds a learnable bias to the output. Default: ``True``
+            padding_mode :
+                Accepted values `zeros` and `circular` Default: `zeros`
+        """
         super().__init__(
             dispatcher={5: torch.nn.Conv3d, 4: torch.nn.Conv2d, 3: torch.nn.Conv1d},
             in_channels=in_channels,
@@ -181,46 +209,45 @@ class ConvTranspose(_Conv):
     3D, 4D, 5D including batch as first dimension).
 
     Otherwise acts exactly like PyTorch's Convolution, see
-    `documentation <https://pytorch.org/docs/stable/nn.html#convolution-layers>`__.
+    `documentation [here](https://pytorch.org/docs/stable/nn.html#convolution-layers)
 
     Default argument for `kernel_size` was added equal to `3`.
 
-    .. note::
-                **IMPORTANT**: `same` currently works only for odd values of `kernel_size`,
+    !!!note
+                __IMPORTANT__: `same` currently works only for odd values of `kernel_size`,
                 `dilation` and `stride`. If any of those is even you should explicitly pad
                 your input asymmetrically with `torch.functional.pad` or a-like.
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced by the convolution
-    kernel_size : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    stride : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    padding : Union[str, int, Tuple[int, int], Tuple[int, int, int]], optional
-        Padding added to both sides of the input. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `same`
-    output_padding : int or tuple, optional
-        Additional size added to one side of the output shape. Default: 0
-    dilation : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Spacing between kernel elements. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `1`
-    groups : int, optional
-        Number of blocked connections from input channels to output channels. Default: 1
-    bias : bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-        dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
-    padding_mode : string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
+    Attributes:
+        in_channels :
+            Number of channels in the input image
+        out_channels :
+            Number of channels produced by the convolution
+        kernel_size :
+            Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        stride :
+            Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        padding :
+            Padding added to both sides of the input. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `same`
+        output_padding :
+            Additional size added to one side of the output shape. Default: 0
+        dilation : 
+            Spacing between kernel elements. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `1`
+        groups :
+            Number of blocked connections from input channels to output channels. Default: 1
+        bias :
+            If ``True``, adds a learnable bias to the output. Default: ``True``
+            dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
+        padding_mode :
+            Accepted values `zeros` and `circular` Default: `zeros`
 
     """
 
@@ -237,6 +264,39 @@ class ConvTranspose(_Conv):
         bias: bool = True,
         padding_mode="zeros",
     ):
+        """Initialize `ConvTranspose` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input image
+            out_channels :
+                Number of channels produced by the convolution
+            kernel_size :
+                Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            stride :
+                Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            padding :
+                Padding added to both sides of the input. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `same`
+            output_padding :
+                Additional size added to one side of the output shape. Default: 0
+            dilation : 
+                Spacing between kernel elements. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `1`
+            groups :
+                Number of blocked connections from input channels to output channels. Default: 1
+            bias :
+                If ``True``, adds a learnable bias to the output. Default: ``True``
+                dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
+            padding_mode :
+                Accepted values `zeros` and `circular` Default: `zeros`
+        """
         super().__init__(
             dispatcher={
                 5: torch.nn.ConvTranspose3d,
@@ -267,42 +327,41 @@ class DepthwiseConv(_Conv):
 
     `kernel_size` got a default value of `3`.
 
-    .. note::
-                **IMPORTANT**: `same` currently works only for odd values of `kernel_size`,
+    !!!note
+                __IMPORTANT__: `same` currently works only for odd values of `kernel_size`,
                 `dilation` and `stride`. If any of those is even you should explicitly pad
                 your input asymmetrically with `torch.functional.pad` or a-like.
 
-    .. note::
-                **IMPORTANT**: `out_channels` has to be divisible by `in_channels` without remainder
+    !!!note
+                __IMPORTANT__: `out_channels` has to be divisible by `in_channels` without remainder
                 (e.g. `out_channels=64` and `in_channels=32`), otherwise error is thrown.
 
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced by the convolution
-    kernel_size : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    stride : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    padding : Union[str, int, Tuple[int, int], Tuple[int, int, int]], optional
-        Padding added to both sides of the input. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `same`
-    dilation : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Spacing between kernel elements. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `1`
-    bias : bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    padding_mode : string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
+    Attributes:
+        in_channels :
+            Number of channels in the input image
+        out_channels :
+            Number of channels produced by the convolution
+        kernel_size : 
+            Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        stride : 
+            Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        padding : 
+            Padding added to both sides of the input. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `same`
+        dilation : 
+            Spacing between kernel elements. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `1`
+        bias :
+            If ``True``, adds a learnable bias to the output. Default: ``True``
+        padding_mode :
+            Accepted values `zeros` and `circular` Default: `zeros`
 
     """
 
@@ -317,6 +376,34 @@ class DepthwiseConv(_Conv):
         bias: bool = True,
         padding_mode: str = "zeros",
     ):
+        """Initialize `Depthwise` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input image
+            out_channels :
+                Number of channels produced by the convolution
+            kernel_size : 
+                Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            stride : 
+                Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            padding : 
+                Padding added to both sides of the input. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `same`
+            dilation : 
+                Spacing between kernel elements. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `1`
+            bias :
+                If ``True``, adds a learnable bias to the output. Default: ``True``
+            padding_mode :
+                Accepted values `zeros` and `circular` Default: `zeros`
+        """
         if out_channels % in_channels != 0:
             raise ValueError(
                 "Depthwise separable convolution needs out_channels divisible by in_channels without remainder."
@@ -347,37 +434,36 @@ class SeparableConv(torch.nn.Module):
 
     `kernel_size` got a default value of `3`.
 
-    .. note::
-                **IMPORTANT**: `same` currently works only for odd values of `kernel_size`,
+    !!!note
+                __IMPORTANT__: `same` currently works only for odd values of `kernel_size`,
                 `dilation` and `stride`. If any of those is even you should explicitly pad
                 your input asymmetrically with `torch.functional.pad` or a-like.
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced by the convolution
-    kernel_size : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    stride : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `3`
-    padding : Union[str, int, Tuple[int, int], Tuple[int, int, int]], optional
-        Padding added to both sides of the input. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `same`
-    dilation : Union[int, Tuple[int, int], Tuple[int, int, int]], optional
-        Spacing between kernel elements. String "same" can be used with odd
-        `kernel_size`, `stride` and `dilation`
-        User can specify `int` or 2-tuple (for `Conv2d`)
-        or 3-tuple (for `Conv3d`). Default: `1`
-    bias : bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    padding_mode : string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
+    Attributes:
+        in_channels :
+            Number of channels in the input image
+        out_channels :
+            Number of channels produced by the convolution
+        kernel_size :
+            Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        stride :
+            Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `3`
+        padding :
+            Padding added to both sides of the input. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `same`
+        dilation :
+            Spacing between kernel elements. String "same" can be used with odd
+            `kernel_size`, `stride` and `dilation`
+            User can specify `int` or 2-tuple (for `Conv2d`)
+            or 3-tuple (for `Conv3d`). Default: `1`
+        bias :
+            If ``True``, adds a learnable bias to the output. Default: ``True``
+        padding_mode :
+            Accepted values `zeros` and `circular` Default: `zeros`
 
     """
 
@@ -392,6 +478,34 @@ class SeparableConv(torch.nn.Module):
         bias: bool = True,
         padding_mode: str = "zeros",
     ):
+        """Initialize `SeparableConv` object.
+        
+        Arguments
+            in_channels :
+                Number of channels in the input image
+            out_channels :
+                Number of channels produced by the convolution
+            kernel_size :
+                Size of the convolving kernel. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            stride :
+                Stride of the convolution. User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `3`
+            padding :
+                Padding added to both sides of the input. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `same`
+            dilation :
+                Spacing between kernel elements. String "same" can be used with odd
+                `kernel_size`, `stride` and `dilation`
+                User can specify `int` or 2-tuple (for `Conv2d`)
+                or 3-tuple (for `Conv3d`). Default: `1`
+            bias :
+                If ``True``, adds a learnable bias to the output. Default: ``True``
+            padding_mode :
+                Accepted values `zeros` and `circular` Default: `zeros`
+        """
         super().__init__()
 
         self.in_channels: int = in_channels
@@ -466,14 +580,19 @@ class ChannelShuffle(torch.nn.Module):
             tl.Linear(10),
         )
 
-    Parameters
-    ----------
-    groups : int
-        Number of groups used in the previous convolutional layer.
+    Attributes:
+        groups :
+            Number of groups used in the previous convolutional layer.
 
     """
 
     def __init__(self, groups: int):
+        """Initialize `ChannelShuffle` object.
+        
+        Arguments:
+            groups :
+                Number of groups used in the previous convolutional layer.
+        """
         super().__init__()
         self.groups: int = groups
 
@@ -507,16 +626,23 @@ class ChannelSplit(torch.nn.Module):
                 return half # for some reason
 
 
-    Parameters
-    ----------
-    p : float
-        Percentage of channels to go into first group
-    dim : int, optional
-        Dimension along which input will be splitted. Default: `1` (channel dimension)
+    Attributes:
+        p :
+            Percentage of channels to go into first group
+        dim :
+            Dimension along which input will be splitted. Default: `1` (channel dimension)
 
     """
 
     def __init__(self, p: float, dim: int = 1):
+        """Initialize `ChannelSplit` object.
+        
+        Arguments:
+             p :
+                Percentage of channels to go into first group
+            dim :
+                Dimension along which input will be splitted. Default: `1` (channel dimension)
+        """
         super().__init__()
         if not 0.0 < p < 1.0:
             raise ValueError(
@@ -537,7 +663,7 @@ class Residual(torch.nn.Module):
 
     For correct usage it is advised to keep input line (skip connection) without
     any layer or activation and implement transformations only in module arguments
-    (as per `Identity Mappings in Deep Residual Networks <https://arxiv.org/pdf/1603.05027.pdf>`__).
+    (as per `Identity Mappings in Deep Residual Networks [here](https://arxiv.org/pdf/1603.05027.pdf)
 
     Example::
 
@@ -566,20 +692,31 @@ class Residual(torch.nn.Module):
 
 
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Convolutional PyTorch module (or other compatible module).
-        Shape of module's `inputs` has to be equal to it's `outputs`, both
-        should be addable `torch.Tensor` instances.
-    projection : torch.nn.Module, optional
-        If shapes of `inputs` and `module` results are different, it's user
-        responsibility to add custom `projection` module (usually `1x1` convolution).
-        Default: `None`
+    Attributes:
+        module :
+            Convolutional PyTorch module (or other compatible module).
+            Shape of module's `inputs` has to be equal to it's `outputs`, both
+            should be addable `torch.Tensor` instances.
+        projection : torch.nn.Module, optional
+            If shapes of `inputs` and `module` results are different, it's user
+            responsibility to add custom `projection` module (usually `1x1` convolution).
+            Default: `None`
 
     """
 
     def __init__(self, module: torch.nn.Module, projection: torch.nn.Module = None):
+        """Initialize `Residual` object.
+        
+        Arguments:
+            module :
+                Convolutional PyTorch module (or other compatible module).
+                Shape of module's `inputs` has to be equal to it's `outputs`, both
+                should be addable `torch.Tensor` instances.
+            projection : torch.nn.Module, optional
+                If shapes of `inputs` and `module` results are different, it's user
+                responsibility to add custom `projection` module (usually `1x1` convolution).
+                Default: `None`
+        """
         super().__init__()
         self.module: torch.nn.Module = module
         self.projection: torch.nn.Module = projection
@@ -599,19 +736,30 @@ class Dense(torch.nn.Module):
     Can be used just like `torchlayers.convolution.Residual` but concatenates
     channels (dimension can be specified) instead of adding.
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Convolutional PyTorch module (or other compatible module).
-        Shape of module's `inputs` has to be equal to it's `outputs`, both
-        should be addable `torch.Tensor` instances.
-    dim : int, optional
-        Dimension along which `input` and module's `output` will be concatenated.
-        Default: `1` (channel-wise)
+    Attributes:
+        module :
+            Convolutional PyTorch module (or other compatible module).
+            Shape of module's `inputs` has to be equal to it's `outputs`, both
+            should be addable `torch.Tensor` instances.
+        dim :
+            Dimension along which `input` and module's `output` will be concatenated.
+            Default: `1` (channel-wise)
 
     """
 
     def __init__(self, module: torch.nn.Module, dim: int = 1):
+        """Initialize `Dense` object.
+        
+        Arguments:
+            module :
+                Convolutional PyTorch module (or other compatible module).
+                Shape of module's `inputs` has to be equal to it's `outputs`, both
+                should be addable `torch.Tensor` instances.
+            projection : torch.nn.Module, optional
+                If shapes of `inputs` and `module` results are different, it's user
+                responsibility to add custom `projection` module (usually `1x1` convolution).
+                Default: `None`
+        """
         super().__init__()
         self.module: torch.nn.Module = module
         self.dim: int = dim
@@ -625,14 +773,14 @@ class Poly(torch.nn.Module):
 
     It's equation for `order` equal to :math:`N` could be expressed as
 
-    .. math::
+    !!!math
 
         I + F + F^2 + ... + F^N
 
     where :math:`I` is identity mapping and :math:`F` is output of `module` applied :math:`^N` times.
 
     Originally proposed by Xingcheng Zhang et al. in
-    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks <https://arxiv.org/abs/1608.06993>`__
+    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks [here](https://arxiv.org/abs/1608.06993)
 
     Example::
 
@@ -659,18 +807,28 @@ class Poly(torch.nn.Module):
         final = output + first_level + second_level + third_level
 
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Convolutional PyTorch module (or other compatible module).
-        `inputs` shape has to be equal to it's `output` shape
-        (for 2D convolution it would be :math:`(C, H, W)`)
-    order : int, optional
-        Order of PolyInception module. For order equal to `1` acts just like
-        ResNet, order of `2` was used in original paper. Default: `2`
+    Attributes:
+        module :
+            Convolutional PyTorch module (or other compatible module).
+            `inputs` shape has to be equal to it's `output` shape
+            (for 2D convolution it would be :math:`(C, H, W)`)
+        order :
+            Order of PolyInception module. For order equal to `1` acts just like
+            ResNet, order of `2` was used in original paper. Default: `2`
     """
 
     def __init__(self, module: torch.nn.Module, order: int = 2):
+        """Initialize `Poly` object.
+        
+        Arguments:
+            module :
+                Convolutional PyTorch module (or other compatible module).
+                `inputs` shape has to be equal to it's `output` shape
+                (for 2D convolution it would be :math:`(C, H, W)`)
+            order :
+                Order of PolyInception module. For order equal to `1` acts just like
+                ResNet, order of `2` was used in original paper. Default: `2`
+        """
         super().__init__()
         if order < 1:
             raise ValueError("Order of Poly cannot be less than 1.")
@@ -693,7 +851,7 @@ class MPoly(torch.nn.Module):
 
     It's equation for `poly_modules` length equal to :math:`N` could be expressed by
 
-    .. math::
+    !!!math
 
         I + F_1 + F_1(F_0) + ... + F_N(F_{N-1}...F_0)
 
@@ -701,18 +859,25 @@ class MPoly(torch.nn.Module):
     applied to output of previous ones.
 
     Originally proposed by Xingcheng Zhang et al. in
-    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks <https://arxiv.org/abs/1608.06993>`__
+    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks [here](https://arxiv.org/abs/1608.06993)
 
-    Parameters
-    ----------
-    *poly_modules : torch.nn.Module
-        Variable arg of modules to use. If empty, acts as an identity.
-        For single module acts like `ResNet`. `2` was used in original paper.
-        All modules need `inputs` and `outputs` of equal `shape`.
+    Attributes:
+        *poly_modules :
+            Variable arg of modules to use. If empty, acts as an identity.
+            For single module acts like `ResNet`. `2` was used in original paper.
+            All modules need `inputs` and `outputs` of equal `shape`.
 
     """
 
     def __init__(self, *poly_modules: torch.nn.Module):
+        """Initialize `MPoly` object.
+        
+        Arguments
+            *poly_modules :
+                Variable arg of modules to use. If empty, acts as an identity.
+                For single module acts like `ResNet`. `2` was used in original paper.
+                All modules need `inputs` and `outputs` of equal `shape`.
+        """
         super().__init__()
         self.poly_modules: torch.nn.Module = torch.nn.ModuleList(poly_modules)
 
@@ -728,7 +893,7 @@ class WayPoly(torch.nn.Module):
 
     It's equation for `poly_modules` length equal to :math:`N` could be expressed by
 
-    .. math::
+    !!!math
 
         I + F_1(I) + F_2(I) + ... + F_N
 
@@ -738,17 +903,24 @@ class WayPoly(torch.nn.Module):
     Could be considered as an extension of standard `ResNet` to many parallel modules.
 
     Originally proposed by Xingcheng Zhang et al. in
-    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks <https://arxiv.org/abs/1608.06993>`__
+    `PolyNet: A Pursuit of Structural Diversity in Very Deep Networks [here](https://arxiv.org/abs/1608.06993)
 
-    Parameters
-    ----------
-    *poly_modules : torch.nn.Module
-        Variable arg of modules to use. If empty, acts as an identity.
-        For single module acts like `ResNet`. `2` was used in original paper.
-        All modules need `inputs` and `outputs` of equal `shape`.
+    Attributes:
+        *poly_modules :
+            Variable arg of modules to use. If empty, acts as an identity.
+            For single module acts like `ResNet`. `2` was used in original paper.
+            All modules need `inputs` and `outputs` of equal `shape`.
     """
 
     def __init__(self, *poly_modules: torch.nn.Module):
+        """Initialize `WayPoly` object.
+        
+        Arguments:
+            *poly_modules :
+                Variable arg of modules to use. If empty, acts as an identity.
+                For single module acts like `ResNet`. `2` was used in original paper.
+                All modules need `inputs` and `outputs` of equal `shape`.
+        """
         super().__init__()
         self.poly_modules: torch.nn.Module = torch.nn.ModuleList(poly_modules)
 
@@ -767,7 +939,7 @@ class SqueezeExcitation(torch.nn.Module):
     and multiplied with original input channel-wise.
 
     Originally proposed by Xingcheng Zhang et al. in
-    `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`__
+    `Squeeze-and-Excitation Networks [here](https://arxiv.org/abs/1709.01507)
 
     Example::
 
@@ -778,20 +950,19 @@ class SqueezeExcitation(torch.nn.Module):
         block = tl.Residual(tl.Conv(128), tl.SqueezeExcitation(), tl.Conv(128))
 
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input
-    hidden : int, optional
-        Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
-        (at least in original research paper). Default: `1/16` of `in_channels` as
-        suggested by original paper.
-    activation : Callable[[Tensor], Tensor], optional
-        One argument callable performing activation after hidden layer.
-        Default: `torch.nn.ReLU()`
-    sigmoid : Callable[[Tensor], Tensor], optional
-        One argument callable squashing values after excitation.
-        Default: `torch.nn.Sigmoid`
+    Attributes:
+        in_channels :
+            Number of channels in the input
+        hidden :
+            Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
+            (at least in original research paper). Default: `1/16` of `in_channels` as
+            suggested by original paper.
+        activation :
+            One argument callable performing activation after hidden layer.
+            Default: `torch.nn.ReLU()`
+        sigmoid :
+            One argument callable squashing values after excitation.
+            Default: `torch.nn.Sigmoid`
 
     """
 
@@ -802,6 +973,22 @@ class SqueezeExcitation(torch.nn.Module):
         activation=None,
         sigmoid=None,
     ):
+        """Initialize `SqueezeExcitation` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input
+            hidden :
+                Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
+                (at least in original research paper). Default: `1/16` of `in_channels` as
+                suggested by original paper.
+            activation :
+                One argument callable performing activation after hidden layer.
+                Default: `torch.nn.ReLU()`
+            sigmoid :
+                One argument callable squashing values after excitation.
+                Default: `torch.nn.Sigmoid`
+        """
         super().__init__()
         self.in_channels: int = in_channels
         self.hidden: int = hidden if hidden is not None else in_channels // 16
@@ -836,19 +1023,18 @@ class Fire(torch.nn.Module):
     Originally proposed by Forrest N. Iandola et al. in
     `SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size <https://arxiv.org/abs/1602.07360>`__
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input
-    out_channels : int
-        Number of channels produced by Fire module
-    hidden_channels : int, optional
-        Number of hidden channels (squeeze convolution layer).
-        Default: `None` (half of `in_channels`)
-    p : float, optional
-        Ratio of :math:`1 x 1` convolution taken from total `out_channels`.
-        The more, the more :math:`1 x 1` convolution will be used during expanding.
-        Default: `0.5` (half of `out_channels`)
+    Attributes:
+        in_channels :
+            Number of channels in the input
+        out_channels :
+            Number of channels produced by Fire module
+        hidden_channels :
+            Number of hidden channels (squeeze convolution layer).
+            Default: `None` (half of `in_channels`)
+        p :
+            Ratio of :math:`1 x 1` convolution taken from total `out_channels`.
+            The more, the more :math:`1 x 1` convolution will be used during expanding.
+            Default: `0.5` (half of `out_channels`)
 
     """
 
@@ -859,6 +1045,21 @@ class Fire(torch.nn.Module):
         hidden_channels=None,
         p: float = 0.5,
     ):
+        """Initialize `Fire` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input
+            out_channels :
+                Number of channels produced by Fire module
+            hidden_channels :
+                Number of hidden channels (squeeze convolution layer).
+                Default: `None` (half of `in_channels`)
+            p :
+                Ratio of :math:`1 x 1` convolution taken from total `out_channels`.
+                The more, the more :math:`1 x 1` convolution will be used during expanding.
+                Default: `0.5` (half of `out_channels`)
+        """
         super().__init__()
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -900,44 +1101,43 @@ class InvertedResidualBottleneck(torch.nn.Module):
     """Inverted residual block used in MobileNetV2, MNasNet, Efficient Net and other architectures.
 
     Originally proposed by Mark Sandler et al. in
-    `MobileNetV2: Inverted Residuals and Linear Bottlenecks <0.5MB model size <https://arxiv.org/abs/1801.04381>`__
+    `MobileNetV2: Inverted Residuals and Linear Bottlenecks <0.5MB model size [here](https://arxiv.org/abs/1801.04381)
 
     Expanded with `SqueezeExcitation` after depthwise convolution by Mingxing Tan et al. in
-    `MnasNet: Platform-Aware Neural Architecture Search for Mobile <https://arxiv.org/abs/1807.11626>`__
+    `MnasNet: Platform-Aware Neural Architecture Search for Mobile [here](https://arxiv.org/abs/1807.11626)
 
     Due to it's customizable nature blocks from other research papers could be easily produced, e.g.
-    `Searching for MobileNetV3 <https://arxiv.org/pdf/1905.02244.pdf>`__ by providing
+    `Searching for MobileNetV3 [here](https://arxiv.org/pdf/1905.02244.pdf) by providing
     `torchlayers.HardSwish()` as `activation`, `torchlayers.HardSigmoid()` as `squeeze_excitation_activation`
     and `squeeze_excitation_hidden` equal to `hidden_channels // 4`.
 
-    Parameters
-    ----------
-    in_channels: int
-        Number of channels in the input
-    hidden_channels: int, optional
-        Number of hidden channels (expanded). Should be greater than `in_channels`, usually
-        by factor of `4`. Default: `in_channels * 4`
-    activation: typing.Callable, optional
-        One argument callable performing activation after hidden layer.
-        Default: `torch.nn.ReLU6()`
-    batchnorm: bool, optional
-        Whether to apply Batch Normalization layer after initial convolution,
-        depthwise expanding part (before squeeze excitation) and final squeeze.
-        Default: `True`
-    squeeze_excitation: bool, optional
-        Whether to use standard `SqueezeExcitation` (see `SqueezeExcitation` module)
-        after depthwise convolution.
-        Default: `True`
-    squeeze_excitation_hidden: int, optional
-        Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
-        (at least in original research paper). Default: `1/16` of `in_channels` as
-        suggested by original paper.
-    squeeze_excitation_activation: typing.Callable, optional
-        One argument callable performing activation after hidden layer.
-        Default: `torch.nn.ReLU()`
-    squeeze_excitation_sigmoid: typing.Callable, optional
-        One argument callable squashing values after excitation.
-        Default: `torch.nn.Sigmoid`
+    Attributes:
+        in_channels:
+            Number of channels in the input
+        hidden_channels:
+            Number of hidden channels (expanded). Should be greater than `in_channels`, usually
+            by factor of `4`. Default: `in_channels * 4`
+        activation:
+            One argument callable performing activation after hidden layer.
+            Default: `torch.nn.ReLU6()`
+        batchnorm:
+            Whether to apply Batch Normalization layer after initial convolution,
+            depthwise expanding part (before squeeze excitation) and final squeeze.
+            Default: `True`
+        squeeze_excitation:
+            Whether to use standard `SqueezeExcitation` (see `SqueezeExcitation` module)
+            after depthwise convolution.
+            Default: `True`
+        squeeze_excitation_hidden:
+            Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
+            (at least in original research paper). Default: `1/16` of `in_channels` as
+            suggested by original paper.
+        squeeze_excitation_activation:
+            One argument callable performing activation after hidden layer.
+            Default: `torch.nn.ReLU()`
+        squeeze_excitation_sigmoid:
+            One argument callable squashing values after excitation.
+            Default: `torch.nn.Sigmoid`
 
     """
 
@@ -952,6 +1152,36 @@ class InvertedResidualBottleneck(torch.nn.Module):
         squeeze_excitation_activation=None,
         squeeze_excitation_sigmoid=None,
     ):
+        """Initialize `InvertedResidualBottleneck` object.
+        
+        Arguments:
+            in_channels:
+                Number of channels in the input
+            hidden_channels:
+                Number of hidden channels (expanded). Should be greater than `in_channels`, usually
+                by factor of `4`. Default: `in_channels * 4`
+            activation:
+                One argument callable performing activation after hidden layer.
+                Default: `torch.nn.ReLU6()`
+            batchnorm:
+                Whether to apply Batch Normalization layer after initial convolution,
+                depthwise expanding part (before squeeze excitation) and final squeeze.
+                Default: `True`
+            squeeze_excitation:
+                Whether to use standard `SqueezeExcitation` (see `SqueezeExcitation` module)
+                after depthwise convolution.
+                Default: `True`
+            squeeze_excitation_hidden:
+                Size of the hidden `torch.nn.Linear` layer. Usually smaller than `in_channels`
+                (at least in original research paper). Default: `1/16` of `in_channels` as
+                suggested by original paper.
+            squeeze_excitation_activation:
+                One argument callable performing activation after hidden layer.
+                Default: `torch.nn.ReLU()`
+            squeeze_excitation_sigmoid:
+                One argument callable squashing values after excitation.
+                Default: `torch.nn.Sigmoid`
+        """
         def _add_batchnorm(block, channels):
             if batchnorm:
                 block.append(normalization.BatchNorm(channels))
