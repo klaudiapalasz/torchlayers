@@ -19,10 +19,9 @@ class GlobalMaxPool1d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveMaxPool1d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -40,10 +39,9 @@ class GlobalMaxPool2d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveMaxPool2d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -61,10 +59,9 @@ class GlobalMaxPool3d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveMaxPool3d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -82,10 +79,9 @@ class GlobalAvgPool1d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveAvgPool1d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -103,10 +99,9 @@ class GlobalAvgPool2d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveAvgPool3d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -124,10 +119,9 @@ class GlobalAvgPool3d(_GlobalPool):
     Internally operates as `torch.nn.AdaptiveAvgPool3d` with redundant `1` dimensions
     flattened.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -147,10 +141,9 @@ class GlobalMaxPool(module.InferDimension):
 
     Internally operates as `torchlayers.pooling.GlobalMaxPoolNd`.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -172,10 +165,9 @@ class GlobalAvgPool(module.InferDimension):
 
     Internally operates as `torchlayers.pooling.GlobalAvgPoolNd`.
 
-    Returns
-    -------
-    `torch.Tensor`
-        `2D` tensor `(batch, features)`
+    Returns:
+        `torch.Tensor`
+            `2D` tensor `(batch, features)`
 
     """
 
@@ -194,27 +186,25 @@ class MaxPool(module.InferDimension):
 
     Default value for `kernel_size` (`2`) was added.
 
-    Parameters
-    ----------
-    kernel_size: int, optional
-        The size of the window to take a max over. Default: `2`
-    stride: int, optional
-        The stride of the window. Default value is :attr:`kernel_size`
-    padding: int, optional
-        Implicit zero padding to be added on both sides. Default: `0`
-    dilation: int
-        Parameter controlling the stride of elements in the window. Default: `1`
-    return_indices: bool, optional
-        If ``True``, will return the max indices along with the outputs.
-        Useful for :class:`torch.nn.MaxUnpool` later. Default: `False`
-    ceil_mode: bool, optional
-        When True, will use `ceil` instead of `floor` to compute the output shape.
-        Default: `False`
+    Attributes:
+        kernel_size:
+            The size of the window to take a max over. Default: `2`
+        stride:
+            The stride of the window. Default value is :attr:`kernel_size`
+        padding:
+            Implicit zero padding to be added on both sides. Default: `0`
+        dilation:
+            Parameter controlling the stride of elements in the window. Default: `1`
+        return_indices:
+            If ``True``, will return the max indices along with the outputs.
+            Useful for :class:`torch.nn.MaxUnpool` later. Default: `False`
+        ceil_mode:
+            When True, will use `ceil` instead of `floor` to compute the output shape.
+            Default: `False`
 
-    Returns
-    -------
-    `torch.Tensor`
-        Same shape as `input` with values pooled.
+    Returns:
+        `torch.Tensor`
+            Same shape as `input` with values pooled.
 
     """
 
@@ -227,6 +217,24 @@ class MaxPool(module.InferDimension):
         return_indices: bool = False,
         ceil_mode: bool = False,
     ):
+        """Initialize `MaxPool` object.
+        
+        Arguments:
+            kernel_size:
+                The size of the window to take a max over. Default: `2`
+            stride:
+                The stride of the window. Default value is :attr:`kernel_size`
+            padding:
+                Implicit zero padding to be added on both sides. Default: `0`
+            dilation:
+                Parameter controlling the stride of elements in the window. Default: `1`
+            return_indices:
+                If ``True``, will return the max indices along with the outputs.
+                Useful for :class:`torch.nn.MaxUnpool` later. Default: `False`
+            ceil_mode:
+                When True, will use `ceil` instead of `floor` to compute the output shape.
+                Default: `False`
+        """
         super().__init__(
             dispatcher={
                 5: torch.nn.MaxPool3d,
@@ -251,24 +259,22 @@ class AvgPool(module.InferDimension):
 
     Default value for `kernel_size` (`2`) was added.
 
-    Parameters
-    ----------
-    kernel_size: int, optional
-        The size of the window. Default: `2`
-    stride: int, optional
-        The stride of the window. Default value is :attr:`kernel_size`
-    padding: int, oprtional
-        Implicit zero padding to be added on both sides. Default: `0`
-    ceil_mode: bool, opriontal
-        When True, will use `ceil` instead of `floor` to compute the output shape.
-        Default: `True`
-    count_include_pad: bool, optional
-        When True, will include the zero-padding in the averaging. Default: `True`
+    Attributes:
+        kernel_size:
+            The size of the window. Default: `2`
+        stride:
+            The stride of the window. Default value is :attr:`kernel_size`
+        padding:
+            Implicit zero padding to be added on both sides. Default: `0`
+        ceil_mode:
+            When True, will use `ceil` instead of `floor` to compute the output shape.
+            Default: `True`
+        count_include_pad:
+            When True, will include the zero-padding in the averaging. Default: `True`
 
-    Returns
-    -------
-    `torch.Tensor`
-        Same shape as `input` with values pooled.
+    Returns:
+        `torch.Tensor`
+            Same shape as `input` with values pooled.
 
     """
 
@@ -280,6 +286,21 @@ class AvgPool(module.InferDimension):
         ceil_mode: bool = False,
         count_include_pad: bool = True,
     ):
+        """Initialize `AvgPool` object.
+        
+        Arguments:
+            kernel_size:
+                The size of the window. Default: `2`
+            stride:
+                The stride of the window. Default value is :attr:`kernel_size`
+            padding:
+                Implicit zero padding to be added on both sides. Default: `0`
+            ceil_mode:
+                When True, will use `ceil` instead of `floor` to compute the output shape.
+                Default: `True`
+            count_include_pad:
+                When True, will include the zero-padding in the averaging. Default: `True`
+        """
         super().__init__(
             dispatcher={
                 5: torch.nn.AvgPool3d,
