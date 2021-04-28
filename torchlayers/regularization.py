@@ -11,7 +11,7 @@ class StochasticDepth(torch.nn.Module):
     Originally proposed by Gao Huang et al. in
     `Deep Networks with Stochastic Depth <www.arxiv.org/abs/1512.03385>`__.
 
-    Originally devised as regularization, though `other research <https://web.stanford.edu/class/cs331b/2016/projects/kaplan_smith_jiang.pdf>`__  suggests:
+    Originally devised as regularization, though `other research [here](https://web.stanford.edu/class/cs331b/2016/projects/kaplan_smith_jiang.pdf)  suggests:
 
     - "[...] StochasticDepth Nets are less tuned for low-level feature extraction but more tuned for higher level feature differentiation."
     - "[...] Stochasticity does not help with the ”dead neurons” problem; in fact the problem is actually more pronounced in the early layers. Nonetheless, the Stochastic Depth Network has relatively fewer dead neurons in later layers."
@@ -28,17 +28,25 @@ class StochasticDepth(torch.nn.Module):
         # May skip tl.Conv with 0.3 probability
         block(torch.randn(1, 3, 32, 32))
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Any module whose output might be skipped
-        (output shape of it has to be equal to the shape of inputs).
-    p : float, optional
-        Probability of survival (e.g. the layer will be kept). Default: ``0.5``
+    Attributes: 
+        module :
+            Any module whose output might be skipped
+            (output shape of it has to be equal to the shape of inputs).
+        p :
+            Probability of survival (e.g. the layer will be kept). Default: ``0.5``
 
     """
 
     def __init__(self, module: torch.nn.Module, p: float = 0.5):
+        """Initialize `Stochastic` object.
+        
+        Arguments:
+            module :
+                Any module whose output might be skipped
+                (output shape of it has to be equal to the shape of inputs).
+            p :
+                Probability of survival (e.g. the layer will be kept). Default: ``0.5``
+        """
         super().__init__()
         if not 0 < p < 1:
             raise ValueError(
@@ -57,23 +65,30 @@ class StochasticDepth(torch.nn.Module):
 class Dropout(module.InferDimension):
     """Randomly zero out some of the tensor elements.
 
-    .. note::
+    !!!note
             Changes input only if `module` is in `train` mode.
 
     Based on input shape it either creates `2D` or `3D` version of dropout for inputs of shape
     `4D`, `5D` respectively (including batch as first dimension).
     For every other dimension, standard `torch.nn.Dropout` will be used.
 
-    Parameters
-    ----------
-    p : float, optional
-        Probability of an element to be zeroed. Default: ``0.5``
-    inplace : bool, optional
-        If ``True``, will do this operation in-place. Default: ``False``
+    Attributes:
+        p :
+            Probability of an element to be zeroed. Default: ``0.5``
+        inplace :
+            If ``True``, will do this operation in-place. Default: ``False``
 
     """
 
     def __init__(self, p=0.5, inplace=False):
+        """Initialize `Dropout` object.
+        
+        Arguments:
+            p :
+                Probability of an element to be zeroed. Default: ``0.5``
+            inplace :
+                If ``True``, will do this operation in-place. Default: ``False``
+        """
         super().__init__(
             dispatcher={
                 5: torch.nn.Dropout3d,
@@ -88,7 +103,7 @@ class Dropout(module.InferDimension):
 class StandardNormalNoise(torch.nn.Module):
     """Add noise from standard normal distribution during forward pass.
 
-    .. note::
+    !!!note
             Changes input only if `module` is in `train` mode.
 
     Example::
@@ -119,7 +134,7 @@ class StandardNormalNoise(torch.nn.Module):
 class UniformNoise(torch.nn.Module):
     """Add noise from uniform `[0, 1)` distribution during forward pass.
 
-    .. note::
+    !!!note
             Changes input only if `module` is in `train` mode.
 
     Example::
@@ -202,19 +217,18 @@ class L2(WeightDecay):
         # Regularize only weights of Linear module
         regularized_layer = tl.L2(tl.Linear(30), weight_decay=1e-5, name="weight")
 
-    .. note::
+    !!!note
             Backward hook will be registered on `module`. If you wish
             to remove `L2` regularization use `remove()` method.
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Module whose parameters will be regularized.
-    weight_decay : float
-        Strength of regularization (has to be greater than `0.0`).
-    name : str, optional
-        Name of parameter to be regularized (if any).
-        Default: all parameters will be regularized (including "bias").
+    Arguments:
+        module :
+            Module whose parameters will be regularized.
+        weight_decay :
+            Strength of regularization (has to be greater than `0.0`).
+        name :
+            Name of parameter to be regularized (if any).
+            Default: all parameters will be regularized (including "bias").
 
     """
 
@@ -232,19 +246,18 @@ class L1(WeightDecay):
         # Regularize all parameters of Linear module
         regularized_layer = tl.L1(tl.Linear(30), weight_decay=1e-5)
 
-    .. note::
+    !!!note
             Backward hook will be registered on `module`. If you wish
             to remove `L1` regularization use `remove()` method.
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Module whose parameters will be regularized.
-    weight_decay : float
-        Strength of regularization (has to be greater than `0.0`).
-    name : str, optional
-        Name of parameter to be regularized (if any).
-        Default: all parameters will be regularized (including "bias").
+    Arguments:
+        module :
+            Module whose parameters will be regularized.
+        weight_decay :
+            Strength of regularization (has to be greater than `0.0`).
+        name :
+            Name of parameter to be regularized (if any).
+            Default: all parameters will be regularized (including "bias").
 
     """
 
