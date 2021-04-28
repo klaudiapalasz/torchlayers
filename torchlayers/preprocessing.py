@@ -16,22 +16,31 @@ class RandomApply(_GetInputs):
     """Apply randomly a list of transformations with a given probability.
 
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase
             (module in `eval` mode).
 
-    Parameters
-    ----------
-    transforms : List | Tuple
-        List of transformations
-    p : float, optional
-        Probability to apply list of transformations. Default: `0.5`
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Attributes:
+        transforms :
+            List of transformations
+        p :
+            Probability to apply list of transformations. Default: `0.5`
+        inplace : bool, optional
+            Whether to run this operation in-place. Default: `False`
 
     """
 
     def __init__(self, transforms, p: float = 0.5, inplace: bool = False):
+        """Initialize `RandomApply` object.
+        
+        Arguments:
+            transforms :
+                List of transformations
+            p :
+                Probability to apply list of transformations. Default: `0.5`
+            inplace :
+                Whether to run this operation in-place. Default: `False`
+        """
         super().__init__()
         self.transforms = torch.nn.ModuleList(transforms)
         self.p: float = p
@@ -52,17 +61,24 @@ class RandomApply(_GetInputs):
 class RandomChoice(torch.nn.Module):
     """Apply single transformation randomly picked from a list.
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase
             (module in `eval` mode).
 
-    Parameters
-    ----------
-    transforms : List | Tuple
-        List of transformations
+    Attributes:
+    
+        transforms :
+            List of transformations
     """
 
     def __init__(self, transforms):
+        """Initialize `RandomChoice` object.
+        
+        Arguments:
+        
+            transforms :
+                List of transformations
+        """
         super().__init__()
         self.transforms = torch.nn.ModuleList(transforms)
 
@@ -77,19 +93,24 @@ class RandomChoice(torch.nn.Module):
 class RandomOrder(_GetInputs):
     """Apply single transformation randomly picked from a list.
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase
             (module in `eval` mode).
 
-    Parameters
-    ----------
-    transforms : List | Tuple
-        List of transformations
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Attributes:
+        transforms :
+            List of transformations
+        inplace : 
+            Whether to run this operation in-place. Default: `False`
     """
 
-    def __init__(self, transforms, inplace: bool = False):
+    def __init__(self, transforms, inplace: bool = False)
+        """Initialize `RandomOrder` object.
+        
+        Arguments:
+            transforms :
+                List of transformations
+        """
         super().__init__()
         self.transforms = torch.nn.ModuleList(transforms)
         self.inplace: bool = inplace
@@ -115,14 +136,13 @@ class Normalize(torch.nn.Module):
     this transform will normalize each channel of tensors in batch via formula:
     `output[channel] = (input[channel] - mean[channel]) / std[channel]`
 
-    Parameters
-    ----------
-    mean : Tuple | List | torch.tensor
-        Sequence of means for each channel
-    std : Tuple | List | torch.tensor
-        Sequence of means for each channel
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Arguments:
+        mean : 
+            Sequence of means for each channel
+        std :
+            Sequence of means for each channel
+        inplace :
+            Whether to run this operation in-place. Default: `False`
 
     """
 
@@ -180,25 +200,37 @@ class Transform(_GetInputs):
 
     {body}
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase
             (module in `eval` mode).
 
-    Parameters
-    ----------
-    p : float, optional
-        Probability of applying transformation. Default: `0.5`
-    batch : bool, optional
-        Whether this operation should be applied on whole batch.
-        If `True` the same transformation is applied on whole batch (or to
-        no image in batch at all). If `False` apply transformation to `p` percent
-        of images contained in batch at random. Default: `False`
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Attributes:
+        p :
+            Probability of applying transformation. Default: `0.5`
+        batch : 
+            Whether this operation should be applied on whole batch.
+            If `True` the same transformation is applied on whole batch (or to
+            no image in batch at all). If `False` apply transformation to `p` percent
+            of images contained in batch at random. Default: `False`
+        inplace :
+            Whether to run this operation in-place. Default: `False`
 
     """
 
     def __init__(self, p: float = 0.5, batch: bool = False, inplace: bool = False):
+        """Initialize `Transform` object.
+        
+        Arguments:
+            p :
+                Probability of applying transformation. Default: `0.5`
+            batch : 
+                Whether this operation should be applied on whole batch.
+                If `True` the same transformation is applied on whole batch (or to
+                no image in batch at all). If `False` apply transformation to `p` percent
+                of images contained in batch at random. Default: `False`
+            inplace :
+                Whether to run this operation in-place. Default: `False`
+        """
         if p < 0 or p > 1:
             raise ValueError("Probability of rotation should be between 0 and 1")
         super().__init__()
@@ -229,28 +261,42 @@ class _RandomRotate90(Transform):
 
     Rotation will be done in a clockwise manner.
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase.
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase.
 
-    Parameters
-    ----------
-    p : float, optional
-        Probability of applying transformation. Default: `0.5`
-    k : int, optional
-        Number of times to rotate. Default: `1`
-    batch : bool, optional
-        Whether this operation should be applied on whole batch.
-        If `True` the same transformation is applied on whole batch (or to
-        no image in batch at all). If `False` apply transformation to `p` percent
-        of images contained in batch at random. Default: `False`
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Attributes:
+        p :
+            Probability of applying transformation. Default: `0.5`
+        k :
+            Number of times to rotate. Default: `1`
+        batch :
+            Whether this operation should be applied on whole batch.
+            If `True` the same transformation is applied on whole batch (or to
+            no image in batch at all). If `False` apply transformation to `p` percent
+            of images contained in batch at random. Default: `False`
+        inplace : 
+            Whether to run this operation in-place. Default: `False`
 
     """
 
     def __init__(
         self, p: float = 0.5, k: int = 1, batch: bool = False, inplace: bool = False
     ):
+        """Initialize `_RandomRotate90` object.
+        
+        Arguments:
+            p :
+                Probability of applying transformation. Default: `0.5`
+            k :
+                Number of times to rotate. Default: `1`
+            batch :
+                Whether this operation should be applied on whole batch.
+                If `True` the same transformation is applied on whole batch (or to
+                no image in batch at all). If `False` apply transformation to `p` percent
+                of images contained in batch at random. Default: `False`
+            inplace : 
+                Whether to run this operation in-place. Default: `False`
+        """
         super().__init__(p, batch, inplace)
         self.k: int = k
 
@@ -300,47 +346,46 @@ class RandomVerticalHorizontalFlip(Transform):
 class RandomErasing(Transform):
     """Randomly select rectangle regions in a batch of image and erase their pixels.
 
-    Originally proposed by Zhong et al. in `Random Erasing Data Augmentation <https://arxiv.org/pdf/1708.04896.pdf>`__
+    Originally proposed by Zhong et al. in `Random Erasing Data Augmentation [here](https://arxiv.org/pdf/1708.04896.pdf)
 
-    .. note::
-            **IMPORTANT**: This function is a `no-op` during inference phase.
-    .. note::
+    !!!note
+            __IMPORTANT__: This function is a `no-op` during inference phase.
+    !!!note
             Each image in batch will have the same rectangle region cut out
             due to efficiency reasons. It probably doesn't alter the idea
             drastically but exact effects weren't tested.
 
 
-    Parameters
-    ----------
-    max_rectangles : int
-        Maximum number of rectangles to create.
-    max_height : int
-        Maximum height of the rectangle.
-    max_width : int, optional
-        Maximum width of the rectangle. Default: same as `max_height`
-    min_rectangles : int, optional
-        Minimum number of rectangles to create. Default: same as `max_rectangles`
-    min_height : int, optional
-        Minimum height of the rectangle. Default: same as `max_height`
-    min_width : int, optional
-        Minimum width of the rectangle. Default: same as `min_width`
-    fill : Callable, optional
-        Callable used to fill the rectangle. It will be passed three arguments:
-        `size` (as a `tuple`), `dtype`, `layout` and `device` of original tensor.
-        If you want to specify `random uniform` filling you can use this:
-        `lambda` function: `random = lambda size, dtype, layout, device: torch.randn(*size, dtype=dtype, layout=layout, device=device)`.
-        If non-default is used, users are responsible for ensuring correct tensor format based
-        on callable passed arguments.
-        Default: fill with `0.0`.
-    p : float, optional
-        Probability of applying transformation. Default: `0.5`
-    batch : bool, optional
-        Whether this operation should be applied on whole batch.
-        If `True` the same transformation is applied on whole batch (or to
-        no image in batch at all). If `False` apply transformation to `p` percent
-        of images contained in batch at random. Default: `False`
-    inplace : bool, optional
-        Whether to run this operation in-place. Default: `False`
+    Attributes:
+        max_rectangles :
+            Maximum number of rectangles to create.
+        max_height :
+            Maximum height of the rectangle.
+        max_width :
+            Maximum width of the rectangle. Default: same as `max_height`
+        min_rectangles :
+            Minimum number of rectangles to create. Default: same as `max_rectangles`
+        min_height :
+            Minimum height of the rectangle. Default: same as `max_height`
+        min_width :
+            Minimum width of the rectangle. Default: same as `min_width`
+        fill :
+            Callable used to fill the rectangle. It will be passed three arguments:
+            `size` (as a `tuple`), `dtype`, `layout` and `device` of original tensor.
+            If you want to specify `random uniform` filling you can use this:
+            `lambda` function: `random = lambda size, dtype, layout, device: torch.randn(*size, dtype=dtype, layout=layout, device=device)`.
+            If non-default is used, users are responsible for ensuring correct tensor format based
+            on callable passed arguments.
+            Default: fill with `0.0`.
+        p :
+            Probability of applying transformation. Default: `0.5`
+        batch :
+            Whether this operation should be applied on whole batch.
+            If `True` the same transformation is applied on whole batch (or to
+            no image in batch at all). If `False` apply transformation to `p` percent
+            of images contained in batch at random. Default: `False`
+        inplace :
+            Whether to run this operation in-place. Default: `False`
 
     """
 
@@ -379,6 +424,39 @@ class RandomErasing(Transform):
         batch: bool = False,
         inplace: bool = False,
     ):
+        """Initialize `RandomErasing` object.
+        
+        Arguments:
+            max_rectangles :
+                Maximum number of rectangles to create.
+            max_height :
+                Maximum height of the rectangle.
+            max_width :
+                Maximum width of the rectangle. Default: same as `max_height`
+            min_rectangles :
+                Minimum number of rectangles to create. Default: same as `max_rectangles`
+            min_height :
+                Minimum height of the rectangle. Default: same as `max_height`
+            min_width :
+                Minimum width of the rectangle. Default: same as `min_width`
+            fill :
+                Callable used to fill the rectangle. It will be passed three arguments:
+                `size` (as a `tuple`), `dtype`, `layout` and `device` of original tensor.
+                If you want to specify `random uniform` filling you can use this:
+                `lambda` function: `random = lambda size, dtype, layout, device: torch.randn(*size, dtype=dtype, layout=layout, device=device)`.
+                If non-default is used, users are responsible for ensuring correct tensor format based
+                on callable passed arguments.
+                Default: fill with `0.0`.
+            p :
+                Probability of applying transformation. Default: `0.5`
+            batch :
+                Whether this operation should be applied on whole batch.
+                If `True` the same transformation is applied on whole batch (or to
+                no image in batch at all). If `False` apply transformation to `p` percent
+                of images contained in batch at random. Default: `False`
+            inplace :
+                Whether to run this operation in-place. Default: `False`
+            """
         RandomErasing._check_greater_than_zero(min_rectangles, "holes")
         RandomErasing._check_greater_than_zero(min_height, "height")
         RandomErasing._check_greater_than_zero(min_width, "width")
