@@ -9,7 +9,7 @@ class ConvPixelShuffle(torch.nn.Module):
     """Two dimensional convolution with ICNR initialization followed by PixelShuffle.
 
     Increases `height` and `width` of `input` tensor by scale, acts like
-    learnable upsampling. Due to `ICNR weight initialization <https://arxiv.org/abs/1707.02937>`__
+    learnable upsampling. Due to `ICNR weight initialization [here](https://arxiv.org/abs/1707.02937)
     of `convolution` it has similar starting point to nearest neighbour upsampling.
 
     `kernel_size` got a default value of `3`, `upscale_factor` got a default
@@ -40,39 +40,38 @@ class ConvPixelShuffle(torch.nn.Module):
         tl.build(network, torch.randn(1, out_channels, 64, 64))
         assert network(torch.randn(5, out_channels, 64, 64)).shape == [5, out_channels, 64, 64]
 
-    .. note::
+    !!!note
 
         Currently only `4D` input is allowed (`[batch, channels, height, width]`),
         due to `torch.nn.PixelShuffle` not supporting `3D` or `5D` inputs.
         See [this PyTorch PR](https://github.com/pytorch/pytorch/pull/6340/files)
         for example of dimension-agnostic implementation.
 
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced after PixelShuffle
-    upscale_factor : int, optional
-        Factor to increase spatial resolution by. Default: `2`
-    kernel_size : int or tuple, optional
-        Size of the convolving kernel. Default: `3`
-    stride : int or tuple, optional
-        Stride of the convolution. Default: 1
-    padding: int or tuple, optional
-        Zero-padding added to both sides of the input. Default: 0
-    padding_mode: string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
-    dilation: int or tuple, optional
-        Spacing between kernel elements. Default: 1
-    groups: int, optional
-        Number of blocked connections from input channels to output channels. Default: 1
-    bias: bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    initializer: typing.Callable[[torch.Tensor,], torch.Tensor], optional
-        Initializer for ICNR initialization, can be a function from `torch.nn.init`.
-        Receive tensor as argument and returns tensor after initialization.
-        Default: `torch.nn.init.kaiming_normal_`
+    Attributes:
+        in_channels :
+            Number of channels in the input image
+        out_channels :
+            Number of channels produced after PixelShuffle
+        upscale_factor :
+            Factor to increase spatial resolution by. Default: `2`
+        kernel_size :
+            Size of the convolving kernel. Default: `3`
+        stride :
+            Stride of the convolution. Default: 1
+        padding:
+            Zero-padding added to both sides of the input. Default: 0
+        padding_mode:
+            Accepted values `zeros` and `circular` Default: `zeros`
+        dilation:
+            Spacing between kernel elements. Default: 1
+        groups:
+            Number of blocked connections from input channels to output channels. Default: 1
+        bias:
+            If ``True``, adds a learnable bias to the output. Default: ``True``
+        initializer:
+            Initializer for ICNR initialization, can be a function from `torch.nn.init`.
+            Receive tensor as argument and returns tensor after initialization.
+            Default: `torch.nn.init.kaiming_normal_`
 
     """
 
@@ -90,6 +89,34 @@ class ConvPixelShuffle(torch.nn.Module):
         padding_mode: str = "zeros",
         initializer=None,
     ):
+        """Initialize `ConvPixelShuffle` object.
+        
+        Arguments:
+            in_channels :
+                Number of channels in the input image
+            out_channels :
+                Number of channels produced after PixelShuffle
+            upscale_factor :
+                Factor to increase spatial resolution by. Default: `2`
+            kernel_size :
+                Size of the convolving kernel. Default: `3`
+            stride :
+                Stride of the convolution. Default: 1
+            padding:
+                Zero-padding added to both sides of the input. Default: 0
+            padding_mode:
+                Accepted values `zeros` and `circular` Default: `zeros`
+            dilation:
+                Spacing between kernel elements. Default: 1
+            groups:
+                Number of blocked connections from input channels to output channels. Default: 1
+            bias:
+                If ``True``, adds a learnable bias to the output. Default: ``True``
+            initializer:
+                Initializer for ICNR initialization, can be a function from `torch.nn.init`.
+                Receive tensor as argument and returns tensor after initialization.
+                Default: `torch.nn.init.kaiming_normal_`
+        """
         super().__init__()
         self.convolution = convolution.Conv(
             in_channels,
@@ -121,15 +148,13 @@ class ConvPixelShuffle(torch.nn.Module):
         Initializes convolutional layer prior to `torch.nn.PixelShuffle`.
         Weights are initialized according to `initializer` passed to to `__init__`.
 
-        Parameters
-        ----------
-        tensor: torch.Tensor
-                Tensor to be initialized using ICNR init.
+        Parameters:
+            tensor: torch.Tensor:
+                    Tensor to be initialized using ICNR init.
 
-        Returns
-        -------
-        torch.Tensor
-                Tensor initialized using ICNR.
+        Returns:
+            torch.Tensor:
+                    Tensor initialized using ICNR.
 
         """
 
