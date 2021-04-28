@@ -103,8 +103,7 @@ class RandomOrder(_GetInputs):
         inplace : 
             Whether to run this operation in-place. Default: `False`
     """
-
-    def __init__(self, transforms, inplace: bool = False)
+    def __init__(self, transforms, inplace: bool = False):
         """Initialize `RandomOrder` object.
         
         Arguments:
