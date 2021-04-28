@@ -127,25 +127,24 @@ def summary(module, *args, **kwargs):
         # Inputs and outputs summary for input of shape (5, 3, 64, 64)
         print(summarizer)
 
-    .. note::
+    !!!note
             This function can be called before or after `torchlayers.build`
             but the results may vary (names and types of layers before and after
             inference).
 
-    .. note::
+    !!!note
             This function runs input through the network hence the input shapes
             are inferred after this call. Network will not be built into
             PyTorch counterparts though (e.g. `tl.Conv` will not become `torch.nn.Conv2d` or a-like).
 
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Instance of module to create summary for
-    *args
-        Arguments required by module's `forward`
-    **kwargs
-        Keyword arguments required by module's `forward`
+    Arguments:
+        module :
+            Instance of module to create summary for
+        *args
+            Arguments required by module's `forward`
+        **kwargs
+            Keyword arguments required by module's `forward`
     """
 
     class Summarizer:
@@ -371,14 +370,13 @@ def build(module, *args, **kwargs):
     `post_build` should have no arguments other than `self` so all necessary
     data should be saved in `module` beforehand.
 
-    Parameters
-    ----------
-    module : torch.nn.Module
-        Instance of module to build
-    *args
-        Arguments required by module's `forward`
-    **kwargs
-        Keyword arguments required by module's `forward`
+    Arguments:
+        module :
+            Instance of module to build
+        *args
+            Arguments required by module's `forward`
+        **kwargs
+            Keyword arguments required by module's `forward`
     """
 
     def torch_compile(module):
@@ -431,14 +429,13 @@ def infer(module_class, index: str = 1):
         layer = StrangeLinear(out_features=64)
 
 
-    Parameters
-    ----------
-    module_class: torch.nn.Module
-        Class of module to be updated with shape inference capabilities.
+    Arguments:
+        module_class:
+            Class of module to be updated with shape inference capabilities.
 
-    index: int, optional
-        Index into `tensor.shape` input which should be inferred, e.g. tensor.shape[1].
-        Default: `1` (`0` being batch dimension)
+        index:
+            Index into `tensor.shape` input which should be inferred, e.g. tensor.shape[1].
+            Default: `1` (`0` being batch dimension)
 
     """
 
@@ -507,15 +504,13 @@ class Lambda(torch.nn.Module):
         model = torch.nn.Sequential(tl.Lambda(lambda tensor: tensor ** 2))
         model(torch.randn(64 , 20))
 
-    Parameters
-    ----------
-    function : Callable
-        Any user specified function
+    Arguments:
+        function :
+            Any user specified function
 
-    Returns
-    -------
-    Any
-        Anything `function` returns
+    Returns:
+        Any
+            Anything `function` returns
 
     """
 
@@ -548,15 +543,13 @@ class Concatenate(torch.nn.Module):
 
     All tensors must have the same shape (except in the concatenating dimension).
 
-    Parameters
-    ----------
-    dim : int
-        Dimension along which tensors will be concatenated
+    Arguments:
+        dim :
+            Dimension along which tensors will be concatenated
 
-    Returns
-    -------
-    torch.Tensor
-        Concatenated tensor along specified `dim`.
+    Returns:
+        torch.Tensor:
+            Concatenated tensor along specified `dim`.
 
     """
 
@@ -583,15 +576,13 @@ class Reshape(torch.nn.Module):
     All tensors must have the same shape (except in the concatenating dimension).
     If possible, no copy of `tensor` will be performed.
 
-    Parameters
-    ----------
-    shapes: *int
-        Variable length list of shapes used in view function
+    Arguments:
+        shapes:
+            Variable length list of shapes used in view function
 
-    Returns
-    -------
-    torch.Tensor
-        Concatenated tensor
+    Returns:
+        torch.Tensor:
+            Concatenated tensor
 
     """
 
