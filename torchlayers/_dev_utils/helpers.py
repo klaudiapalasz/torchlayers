@@ -55,20 +55,18 @@ def create_vars(
     """
     Create list of arguments for uninstantiated `__repr__` module.
 
-    Parameters
-    ----------
-    **non_inferable_names : Dict[str, Any]
-        Non-inferable names and their respective values of the module
-    varargs_variable : str
-        Name of variable possibly holding varargs for module's __init__.
-    kwargs_variable : str
-        Name of variable possibly holding kwargs for module's __init__.
+    Arguments:
+        **non_inferable_names :
+            Non-inferable names and their respective values of the module
+        varargs_variable :
+            Name of variable possibly holding varargs for module's __init__.
+        kwargs_variable :
+            Name of variable possibly holding kwargs for module's __init__.
 
-    Returns
-    -------
-    typing.List[str]:
-        List of strings formatted in the manner argument=value to display
-        for uninstantiated module.
+    Returns:
+        typing.List[str]:
+            List of strings formatted in the manner argument=value to display
+            for uninstantiated module.
     """
     dictionary = {**non_inferable_names, **collections.OrderedDict(vars(self))}
 
