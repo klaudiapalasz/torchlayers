@@ -47,18 +47,17 @@ class InferDimension(torch.nn.Module):
     This class works correctly with `torchlayers.build` and other provided
     functionalities.
 
-    Parameters
-    ----------
-    dispatcher: Dict[int, torch.nn.Module]
-        Key should be length of input's tensor shape. Value should be a `torch.nn.Module`
-        to be used for the dimensionality.
-    initializer: Callable[[torch.nn.Module, torch.Tensor, **kwargs], torch.nn.Module], optional
-        How to initialize dispatched module. Can be used to modify it's creation.
-        First argument - dispatched module class, second - input tensor, **kwargs are
-        arguments to use for module initialization. Should return module's instance.
-        By default dispatched module initialized with **kwargs is returned.
-    **kwargs:
-        Arguments used to initialize dispatched module
+    Attributes:
+        dispatcher:
+            Key should be length of input's tensor shape. Value should be a `torch.nn.Module`
+            to be used for the dimensionality.
+        initializer:
+            How to initialize dispatched module. Can be used to modify it's creation.
+            First argument - dispatched module class, second - input tensor, **kwargs are
+            arguments to use for module initialization. Should return module's instance.
+            By default dispatched module initialized with **kwargs is returned.
+        **kwargs:
+            Arguments used to initialize dispatched module
 
     """
 
@@ -68,6 +67,20 @@ class InferDimension(torch.nn.Module):
         initializer: typing.Callable = None,
         **kwargs,
     ):
+        """Initialize `InferDimension` object.
+        
+        Arguments:
+            dispatcher:
+                Key should be length of input's tensor shape. Value should be a `torch.nn.Module`
+                to be used for the dimensionality.
+            initializer:
+                How to initialize dispatched module. Can be used to modify it's creation.
+                First argument - dispatched module class, second - input tensor, **kwargs are
+                arguments to use for module initialization. Should return module's instance.
+                By default dispatched module initialized with **kwargs is returned.
+            **kwargs:
+                Arguments used to initialize dispatched module
+        """
         super().__init__()
 
         self._dispatcher = dispatcher
