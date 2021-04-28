@@ -30,21 +30,19 @@ def parse_arguments(
         only have *args and **kwargs and are otherwise unparsable.
 
 
-    Parameters
-    ----------
-    init_arguments : List[str]
-        __init__ arguments gathered by `inspect.signature(cls).parameters`
-    module : type
-        `type` metaclass inheriting from `torch.nn.Module` and named like original
-        class (without shape inference)
+    Arguments:
+        init_arguments :
+            __init__ arguments gathered by `inspect.signature(cls).parameters`
+        module :
+            `type` metaclass inheriting from `torch.nn.Module` and named like original
+            class (without shape inference)
 
-    Returns
-    -------
-    Tuple[List[str], Dict[str, Any]]
-        First item are arguments used for dynamic __init__ creation of inferable
-        module. Second item is dictionary where key is name of argument and value can be anything.
-        Those are uninferable arguments (not present in inferable __init__)
-        and used solely for inferable module's __repr__ creation.
+    Returns:
+        Tuple[List[str], Dict[str, Any]]
+            First item are arguments used for dynamic __init__ creation of inferable
+            module. Second item is dictionary where key is name of argument and value can be anything.
+            Those are uninferable arguments (not present in inferable __init__)
+            and used solely for inferable module's __repr__ creation.
 
     """
 
@@ -103,15 +101,13 @@ def create_init(parsed_init_arguments) -> typing.Callable:
     They will be unpacked after all arguments during first `forward` call when
     module is instantiated.
 
-    Parameters
-    ----------
-    parsed_init_arguments : List[str]
-        __init__ arguments parsed by `parse_arguments` function.
+    Arguments:
+        parsed_init_arguments :
+            __init__ arguments parsed by `parse_arguments` function.
 
-    Returns
-    -------
-    Callable
-        Function being __init__ of uninstantiated module.
+    Returns:
+        Callable
+            Function being __init__ of uninstantiated module.
 
     """
     namespace = {}
@@ -158,23 +154,21 @@ def create_forward(
     module overlay.
 
 
-    Parameters
-    ----------
-    module : str
-        Name of variable where instantiated module will be saved. Usually equal to
-        global variable `MODULE`
-    module_class : torch.nn.Module class
-        Name of variable where `__class__` of module to be instantiated is kept.
-        Used to instantiate module only.
-    parsed_init_arguments : List[str]
-        __init__ arguments parsed by `parse_arguments` function. Used to get names
-        of variables saved in non-instantiated module to be passed to `__init__`
-        of to be instantiated module.
+    Arguments:
+        module :
+            Name of variable where instantiated module will be saved. Usually equal to
+            global variable `MODULE`
+        module_class :
+            Name of variable where `__class__` of module to be instantiated is kept.
+            Used to instantiate module only.
+        parsed_init_arguments :
+            __init__ arguments parsed by `parse_arguments` function. Used to get names
+            of variables saved in non-instantiated module to be passed to `__init__`
+            of to be instantiated module.
 
     Returns
-    -------
-    Callable
-        Function being `forward` of uninstantiated module.
+        Callable
+            Function being `forward` of uninstantiated module.
 
     """
 
@@ -228,18 +222,16 @@ def create_repr(module, **non_inferable_names) -> typing.Callable:
     (and except the ones provided explicitly by user).
 
 
-    Parameters
-    ----------
-    module : str
-        Name of variable where instantiated module will be saved. Usually equal to
-        global variable `MODULE`
-    **non_inferable_names : Dict[str, Any]
-        Non-inferable names and their respective values of the module
+    Arguments:
+        module :
+            Name of variable where instantiated module will be saved. Usually equal to
+            global variable `MODULE`
+        **non_inferable_names :
+            Non-inferable names and their respective values of the module
 
-    Returns
-    -------
-    Callable
-        Function being `__repr__` of uninstantiated module.
+    Returns:
+        Callable
+            Function being `__repr__` of uninstantiated module.
 
     """
 
@@ -269,16 +261,14 @@ def create_getattr(module) -> typing.Callable:
 
     Can be considered proxy passing user calls `module` after instantiation.
 
-    Parameters
-    ----------
-    module : str
-        Name of variable where instantiated module will be saved. Usually equal to
-        global variable `MODULE`
+    Arguments:
+        module :
+            Name of variable where instantiated module will be saved. Usually equal to
+            global variable `MODULE`
 
-    Returns
-    -------
-    Callable
-        __getattr__ function
+    Returns:
+        Callable
+            __getattr__ function
     """
 
     def __getattr__(self, name) -> str:
@@ -316,21 +306,19 @@ def create_reduce(module, parsed_init_arguments):
 
     If the module was not instantiated `ValueError` error is thrown.
 
-    Parameters
-    ----------
-    module : str
-        Name of variable where instantiated module will be saved. Usually equal to
-        global variable `MODULE`
+    Arguments:
+        module :
+            Name of variable where instantiated module will be saved. Usually equal to
+            global variable `MODULE`
 
-    parsed_init_arguments : List[str]
-        __init__ arguments parsed by `parse_arguments` function. Used to get names
-        of variables saved in non-instantiated module to be passed to `__init__`
-        of to be instantiated module.
+        parsed_init_arguments :
+            __init__ arguments parsed by `parse_arguments` function. Used to get names
+            of variables saved in non-instantiated module to be passed to `__init__`
+            of to be instantiated module.
 
-    Returns
-    -------
-    Callable
-        __getattr__ function
+    Returns:
+        Callable
+            __getattr__ function
     """
 
     def __reduce__(self):
