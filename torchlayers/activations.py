@@ -14,7 +14,7 @@ def hard_sigmoid(tensor: torch.Tensor, inplace: bool = False) -> torch.Tensor:
             Whether operation should be performed `in-place`. Default: `False`
 
     Returns:
-        torch.Tensor
+        torch.Tensor:
     """
     return torch.nn.functional.hardtanh(tensor, min_val=0, inplace=inplace)
 
@@ -48,7 +48,7 @@ def swish(tensor: torch.Tensor, beta: float = 1.0) -> torch.Tensor:
             Multiplier used for sigmoid. Default: 1.0 (no multiplier)
 
     Returns:
-        torch.Tensor
+        torch.Tensor:
     """
     return torch.sigmoid(beta * tensor) * tensor
 
@@ -113,8 +113,8 @@ class HardSwish(torch.nn.Module):
     Above formula proposed by in Andrew Howard et al. in `Searching for MobileNetV3 <https://arxiv.org/pdf/1905.02244.pdf>`__.
 
     Arguments:
-     tensor :
-         Tensor activated element-wise
+        tensor :
+            Tensor activated element-wise
 
     """
 
