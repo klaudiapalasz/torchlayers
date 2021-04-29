@@ -18,7 +18,7 @@ class _Conv(module.InferDimension):
 
     See concrete classes (e.g. `Conv` or `DepthwiseConv`) for specific use cases.
 
-    Arguments:
+    Attributes:
         dispatcher:
             Dispatching dictionary for dimensionality reduction
         **kwargs
@@ -31,6 +31,14 @@ class _Conv(module.InferDimension):
         dispatcher: typing.Dict[int, typing.Any],
         **kwargs,
     ):
+        """Initialize `_Conv` object.
+        
+        Arguments:
+            dispatcher:
+                Dispatching dictionary for dimensionality reduction
+            **kwargs
+                Any arguments needed for class creation.
+        """
         super().__init__(dispatcher=dispatcher, initializer=self._pad, **kwargs)
 
     def _pad(self, inner_class, inputs, **kwargs):
@@ -376,7 +384,7 @@ class DepthwiseConv(_Conv):
         bias: bool = True,
         padding_mode: str = "zeros",
     ):
-        """Initialize `Depthwise` object.
+        """Initialize `DepthwiseConv` object.
         
         Arguments:
             in_channels :
@@ -731,7 +739,7 @@ class Residual(torch.nn.Module):
 class Dense(torch.nn.Module):
     """Dense residual connection concatenating input channels and output channels of provided module.
 
-    Originally proposed by Gao Huang et al. in `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`__
+    Originally proposed by Gao Huang et al. in `Densely Connected Convolutional Networks [here](https://arxiv.org/abs/1608.06993)
 
     Can be used just like `torchlayers.convolution.Residual` but concatenates
     channels (dimension can be specified) instead of adding.
