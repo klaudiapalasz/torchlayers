@@ -504,7 +504,7 @@ class Lambda(torch.nn.Module):
         model = torch.nn.Sequential(tl.Lambda(lambda tensor: tensor ** 2))
         model(torch.randn(64 , 20))
 
-    Arguments:
+    Attributes:
         function :
             Any user specified function
 
@@ -515,6 +515,12 @@ class Lambda(torch.nn.Module):
     """
 
     def __init__(self, function: typing.Callable):
+        """Initialize `Lambda` object.
+        
+        Arguments:
+            function :
+                Any user specified function
+        """
         super().__init__()
         self.function: typing.Callable = function
 
@@ -543,7 +549,7 @@ class Concatenate(torch.nn.Module):
 
     All tensors must have the same shape (except in the concatenating dimension).
 
-    Arguments:
+    Attributes:
         dim :
             Dimension along which tensors will be concatenated
 
@@ -554,6 +560,12 @@ class Concatenate(torch.nn.Module):
     """
 
     def __init__(self, dim: int):
+        """Initialize `Concatenate` object.
+      
+        Arguments:
+            dim :
+                Dimension along which tensors will be concatenated
+      """
         super().__init__()
         self.dim: int = dim
 
@@ -576,7 +588,7 @@ class Reshape(torch.nn.Module):
     All tensors must have the same shape (except in the concatenating dimension).
     If possible, no copy of `tensor` will be performed.
 
-    Arguments:
+    Attributes:
         shapes:
             Variable length list of shapes used in view function
 
@@ -587,6 +599,12 @@ class Reshape(torch.nn.Module):
     """
 
     def __init__(self, *shapes: int):
+        """Initialize `Reshape` object.
+        
+        Arguments:
+            shapes:
+                Variable length list of shapes used in view function
+        """
         super().__init__()
         self.shapes: typing.Tuple[int] = shapes
 
