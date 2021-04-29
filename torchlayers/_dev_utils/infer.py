@@ -166,7 +166,7 @@ def create_forward(
             of variables saved in non-instantiated module to be passed to `__init__`
             of to be instantiated module.
 
-    Returns
+    Returns:
         Callable
             Function being `forward` of uninstantiated module.
 
